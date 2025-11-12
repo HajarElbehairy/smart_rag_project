@@ -40,9 +40,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# API Keys
-GEMINI_API_KEY = "AIzaSyAsMvD5vJbNl21Qc5NdIXfl2bw_D4ZOYAw"
-GROQ_API_KEY = "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"
+
+import os
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+
 
 genai.configure(api_key=GEMINI_API_KEY)
 groq_client = Groq(api_key=GROQ_API_KEY)
