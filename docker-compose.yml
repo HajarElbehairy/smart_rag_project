@@ -1,0 +1,43 @@
+version: "3.9"
+
+services:
+  scraper:
+    image: python:3.11
+    working_dir: /app
+    volumes:
+      - ./scraper:/app
+      - ./data:/data
+    command: ["python", "scraper.py"]
+    env_file:
+      - .env
+    networks:
+      - rag_net
+
+  rag_service:
+    image: python:3.11
+    working_dir: /app
+    volumes:
+      - ./rag_service:/app
+      - ./data:/data
+    ports:
+      - "8000:8000"
+    command: ["python", "app.py"]
+    env_file:
+      - .env
+    networks:
+      - rag_net
+
+  web:
+    image: node:20-alpine
+    working_dir: /app
+    volumes:
+      - ./web:/app
+    ports:
+      - "5173:5173"
+    command: ["sh", "-c", "npm install && npm run dev"]
+    networks:
+      - rag_net
+
+networks:
+  rag_net:
+    driver: bridge
