@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   scraper:
     image: python:3.11
@@ -7,9 +5,10 @@ services:
     volumes:
       - ./scraper:/app
       - ./data:/data
-    command: ["python", "scraper.py"]
+      - ./requirements.txt:/requirements.txt
     env_file:
       - .env
+    command: sh -c "pip install --no-cache-dir -r /requirements.txt && python scraper.py"
     networks:
       - rag_net
 
@@ -19,25 +18,11 @@ services:
     volumes:
       - ./rag_service:/app
       - ./data:/data
+      - ./requirements.txt:/requirements.txt
     ports:
       - "8000:8000"
-    command: ["python", "app.py"]
     env_file:
       - .env
+    command: sh -c "pip install --no-cache-dir -r /requirements.txt && python app.py"
     networks:
       - rag_net
-
-  web:
-    image: node:20-alpine
-    working_dir: /app
-    volumes:
-      - ./web:/app
-    ports:
-      - "5173:5173"
-    command: ["sh", "-c", "npm install && npm run dev"]
-    networks:
-      - rag_net
-
-networks:
-  rag_net:
-    driver: bridge

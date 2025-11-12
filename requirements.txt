@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+faiss-cpu
+numpy
+requests
+beautifulsoup4
+selenium
+tqdm
+webdriver-manager
+google-generativeai
+groq
+markdownify
+tiktoken
